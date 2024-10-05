@@ -83,11 +83,9 @@ const Options = () => {
         setVideoFileLink(videoFileUrl); // Set the video file link to be displayed
         alert('Video created successfully!');
       } else {
-        setVideoFileLink('/output/video/video.mp4');
         setError('Failed to create video. Please try again.');
       }
     } catch (error) {
-      setVideoFileLink('/output/video/video.mp4');
       console.error('Error uploading the file:', error);
       setError('Failed to create video. Please try again.');
     } finally {
