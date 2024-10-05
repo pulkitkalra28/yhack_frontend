@@ -10,6 +10,7 @@ const FlashCards = () => {
   const location = useLocation();
 
   const pdfFile = location.state?.pdfFile; // Retrieve the PDF file
+  console.lof(pdfFile);
 
   // Dummy response from backend with updated question and answer fields
   const response = {

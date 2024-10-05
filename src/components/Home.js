@@ -5,6 +5,7 @@ import './Home.css';
 const Home = () => {
   const [pdfFile, setPdfFile] = useState(null); // State to store the PDF file
   const navigate = useNavigate();
+  console.log(pdfFile);
 
   const handleUpload = (e) => {
     const file = e.target.files[0]; // Get the uploaded file
