@@ -2,8 +2,7 @@ import PyPDF2
 import openai
 import json
 
-api_key = "sk-CMEqONGTbQgU3S4BpLi4__jWZ-dwFKbJ7BUNPbum8VT3BlbkFJFAYZhJx7Kykn-UstMavLiE_WPBv99w41lXR35_sJ8A"
-client = openai.OpenAI(api_key=api_key)
+client = openai.OpenAI()
 model_name = "gpt-4o-mini"
 
 upload_file = "notes.pdf"
