@@ -11,6 +11,7 @@ const Options = () => {
   const [loading, setLoading] = useState(false); // Loader state
   const [audioFileLink, setAudioFileLink] = useState(''); // To store the audio file link
   const [videoFileLink, setVideoFileLink] = useState(''); // To store the video file link
+  const [flashcardsData, setFlashcardsData] = useState(null); // To store flashcards data
   const [error, setError] = useState(''); // To store error messages
 
   // Function to send the PDF file to the /createPodcast API
@@ -93,6 +94,47 @@ const Options = () => {
     }
   };
 
+  // Function to send the PDF file to the /createFlashCards API
+  const handleCreateFlashCards = async () => {
+    if (!pdfFile) {
+      alert('No PDF file available to send.');
+      return;
+    }
+
+    setLoading(true); // Show loader
+    setError(''); // Clear previous errors
+    setFlashcardsData(null); // Reset the flashcards data
+
+    const formData = new FormData();
+    formData.append('file', pdfFile); // Append the file to the form data
+
+    try {
+      // Send the file to the Python API for flashcards creation
+      const response = await axios.post('http://localhost:5000/createFlashCards', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Important to send FormData
+        },
+      });
+
+      // Check if the response is successful
+      if (response.status === 200 && response.data.flashcards) {
+        // Set the flashcards data in the state
+        setFlashcardsData(response.data.flashcards);
+        alert('Flashcards created successfully!');
+        
+        // Navigate to the FlashCards component and pass flashcards data
+        navigate('/flashcards', { state: { flashcards: response.data.flashcards } });
+      } else {
+        setError('Failed to create flashcards. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error creating flashcards:', error);
+      setError('Failed to create flashcards. Please try again.');
+    } finally {
+      setLoading(false); // Hide loader after the process completes
+    }
+  };
+
   return (
     <div className="centered-container">
       <div className="content-box">
@@ -135,7 +177,8 @@ const Options = () => {
           <button onClick={handleCreateVideo} disabled={loading}>Create BrainROT Video</button>
 
           {/* Placeholder buttons for other features */}
-          <button onClick={() => alert('Flashcards creation not implemented yet')}>Create Flashcards</button>
+          <button onClick={handleCreateFlashCards} disabled={loading}>Create Flashcards</button>
+          {/* <button onClick={() => alert('Flashcards creation not implemented yet')}>Create Flashcards</button> */}
         </div>
       </div>
     </div>

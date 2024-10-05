@@ -8,9 +8,13 @@ const FlashCards = () => {
   const [flipped, setFlipped] = useState(false);
   const [transitioning, setTransitioning] = useState(false); // Track if the card is in transition
   const location = useLocation();
-
+  const flashcards = location.state?.flashcards; // Get flashcards from location state
   const pdfFile = location.state?.pdfFile; // Retrieve the PDF file
   console.log(pdfFile);
+
+  if (!flashcards) {
+    return <p>Something went wrong. No flashcards data found. Try again.</p>;
+  }
 
   // Dummy response from backend with updated question and answer fields
   const response = {
@@ -67,6 +71,7 @@ const FlashCards = () => {
       }
     ]
   };
+
 
   // Handle navigating to the next card
   const handleNext = () => {
