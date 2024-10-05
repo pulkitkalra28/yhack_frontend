@@ -1,0 +1,16 @@
+/* Home Page */
+.home-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    text-align: center;
+    background-color: #f0f4f8;
+  }
+  
+  .home-page h1 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+  }
+  

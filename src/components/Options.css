@@ -1,0 +1,35 @@
+/* Options Page */
+.options-page {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f0f4f8;
+  }
+  
+  .options-page button {
+    background-color: #2ecc71;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 100%;
+    max-width: 300px;
+    transition: background-color 0.3s ease;
+    margin: 15px 0; /* Adding space between buttons */
+  }
+  
+  .options-page button:hover {
+    background-color: #27ae60;
+  }
+
+  .buttons-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
