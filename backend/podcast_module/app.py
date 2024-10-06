@@ -56,15 +56,16 @@ def upload_file():
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         print(f"Saving file to: {file_path}")  # Debugging
         file.save(file_path)
+        fn = file.filename.split('.')[0]
 
         pdf_files = glob.glob(os.path.join(app.config['UPLOAD_FOLDER'], "*.pdf"))
         text  = extract_text_from_pdf(pdf_files[0])
         conversation_text = get_conversation(text)
         conversation_text = conversation_text.replace("*","")
         print(conversation_text)
-        text_to_speech_gtts(conversation_text,output_file='../../public/output/audio/pod.mp3')
+        text_to_speech_gtts(conversation_text,output_file=f"../../public/output/audio/{fn}"+".mp3")
         # Return a success message with file details
-        return jsonify({"message": f"File {file.filename} successfully uploaded", "file_path": file_path}), 200
+        return jsonify({"message": f"File {file.filename} successfully uploaded","success":true, "fileName":f"{fn}"+".mp3", "file_path": file_path}), 200
     else:
         print("File type not allowed")  # Debugging
         return jsonify({"error": "Allowed file types are pdf"}), 400
