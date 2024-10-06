@@ -8,6 +8,7 @@ import openai
 from gtts import gTTS
 from pydub import AudioSegment
 from pod import extract_text_from_pdf, get_conversation, text_to_speech_gtts
+from brainrot import extract_text_from_pdf_brainrot, modify_video, openai_sequence_response
 
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -61,13 +62,44 @@ def upload_file():
         conversation_text = get_conversation(text)
         conversation_text = conversation_text.replace("*","")
         print(conversation_text)
-        text_to_speech_gtts(conversation_text,output_file='output/pod.mp3')
+        text_to_speech_gtts(conversation_text,output_file='../../public/output/audio/pod.mp3')
         # Return a success message with file details
         return jsonify({"message": f"File {file.filename} successfully uploaded", "file_path": file_path}), 200
     else:
         print("File type not allowed")  # Debugging
         return jsonify({"error": "Allowed file types are pdf"}), 400
 
+
+@app.route('/createVideo', methods=['POST'])
+def upload_file2():
+    """Handle the file upload and processing."""
+    print("[brainrot module] => Received upload request")  # Log when the endpoint is hit
+    
+    # Log request headers for debugging
+    print(f"Request Headers: {request.headers}")
+    
+    if 'file' not in request.files:
+        print("[brainrot module] => No file part in the request")  # Debugging
+        return jsonify({"error": "No file part in the request"}), 400
+
+    file = request.files['file']
+    print(f"[brainrot module] => File object received: {file}")  # Log the file object details
+
+    if file.filename == '':
+        print("[brainrot module] => No file selected for uploading")  # Debugging
+        return jsonify({"error": "No file selected for uploading"}), 400
+
+    if file and allowed_file(file.filename):
+
+        pdf_files = glob.glob(os.path.join(app.config['UPLOAD_FOLDER'], "*.pdf"))
+        text  = extract_text_from_pdf_brainrot(pdf_files[0])
+        captions_for_brainrot = openai_sequence_response(text)
+        modify_video(video_file="../brainrot_module/sludge1.mp4", data=captions_for_brainrot,output_file_path="../../public/output/video/output_brainrot.mp4")
+        # Return a success message with file details
+        return jsonify({"success": True, "fileName":"output_brainrot.mp4"}), 200
+    else:
+        print("File type not allowed")  # Debugging
+        return jsonify({"success": False, "error": "Allowed file types are pdf"}), 400
 
 #def extract_text_from_pdf(file_path):
 #    print('extracting text from pdf')

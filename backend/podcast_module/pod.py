@@ -48,7 +48,7 @@ Keep it concise so it is not very long
     return conversation_text
 
 
-def text_to_speech_gtts(conversation_text, output_file="output.mp3"):
+def text_to_speech_gtts(conversation_text, output_file):
     print('TTS Started ...')
     # Split the conversation by speaker labels
     lines = conversation_text.split('\n')
