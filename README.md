@@ -1,70 +1,83 @@
-# Getting Started with Create React App
 
-this project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Lemme Learn More
 
-## Available Scripts
+**Lemme Learn More** is a web application designed to help students efficiently digest information in an engaging manner. The platform provides three modules (APIs) that take a PDF upload from the user, summarizing the content in creative ways. This is especially targeted at students with limited time to learn a lot of things and aims to make learning more digestible.
 
-In the project directory, you can run:
+## Modules
 
-### `npm start`
+### 1. Podcast Generator
+This module converts the PDF into an engaging podcast. It extracts text using `pypdf2` and utilizes the OpenAI Chat Completions API to create a podcast-like transcript featuring an interesting conversation between guests. The final output is synthesized using Google Text-to-Speech (TTS) and provided as an MP3 file to the user.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 2. YT Shorts/Reels/TikTok Generator
+This module generates short, trendy video clips summarizing the PDF content. Text is extracted using the `pymupdf4llm` library, broken into 2-second chunks, and embedded into a dynamic video background. This "brain rot" content taps into the short attention span of younger generations, turning educational material into engaging, fast-paced clips.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 3. Flashcards Generator
+The flashcard generator extracts key information from the PDF and generates a JSON file of flashcards using OpenAI's Chat Completions API. The frontend (built in React) then renders these as interactive flashcards for studying.
 
-### `npm test`
+## Technologies Used
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Frontend:** React.js
+- **Backend:** Flask
+- **APIs/Libraries:**
+  - `pypdf2` (for PDF text extraction)
+  - OpenAI Chat Completions API (for text generation)
+  - Google TTS (for text-to-speech)
+  - `pymupdf4llm` (for extracting summarized data from PDFs)
+  - `moviepy` (for video generation)
 
-### `npm run build`
+## Getting Started
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Prerequisites
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Frontend:**
+  - You will need Node.js and npm to run the frontend.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Backend:**
+  - You will need Python 3.8+, ImageMagick, and FFmpeg installed on your system. You can refer to their official documentation for installation instructions.
+  
+### Installation
 
-### `npm run eject`
+#### Frontend:
+1. Navigate to the `frontend` directory.
+2. Install the required packages:
+   ```bash
+   npm install
+   ```
+3. Start the frontend:
+   ```bash
+   npm run start
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+#### Backend:
+1. Navigate to the `backend` directory.
+2. Install the required packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Run the Flask app:
+   ```bash
+   python3 app.py
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+If the Flask app doesn’t start, you may be missing some packages. Feel free to open an issue or contribute.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Known Issues
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **MoviePy Policy Error:**
+  If you encounter an error related to MoviePy, such as `policy not allowed "@*"`, you will need to edit the `policy.xml` file in the ImageMagick installation directory. Simply comment out the line containing `@*`.
 
-## Learn More
+- **ImageMagick Dependency:**
+  Remember that MoviePy requires ImageMagick to be installed on your system. 
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Fetch.ai integration
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The repository has attempted to create fetch.ai AI Agent and connect with mailbox. Sure, it works on the Alpana testnet, but we have not deployed it to main chain. It is for POC purpose and fetch.ai agentverse fit our use case properly.
 
-### Code Splitting
+## Contributions
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+We welcome contributions! If you'd like to improve this project, feel free to open a pull request or submit an issue.
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Once both the frontend and backend are running, you can explore and interact with the platform to generate podcasts, videos, and flashcards from your PDFs.
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
