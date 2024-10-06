@@ -5,7 +5,7 @@ import json
 client = openai.OpenAI()
 model_name = "gpt-4o-mini"
 
-upload_file = "uploads"#"Users/pulkit/Downloads/chatgpt_article.pdf"
+upload_file = "uploads"
 
 def extract_text_from_pdf_flashcard(pdf_path):
     # Open and read the PDF file
@@ -33,14 +33,12 @@ def generate_questions_and_answers(text):
     
     # Extract Q&A pairs from the response
     completion = response.choices[0].message.content
-    print(completion)
+    print(completion,type(completion),type(response))
     return completion
 
 def save_json_to_file(json_data, output_file_path):
-    # Write the JSON data to a file
     with open(output_file_path, 'w') as json_file:
         json_file.write(json_data)
-        # json.dump(json_data, json_file)
     print(f"JSON data successfully saved to {output_file_path}")
 
 

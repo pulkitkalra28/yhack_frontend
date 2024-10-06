@@ -26,13 +26,11 @@ Convert the following text into a podcast conversation with a host and a guest:
 
 {text}
 
-Format it as a conversation with clearly marked speaker labels such as "Host:" and "Guest:".
-Keep it concise so it is not very long
+Format it as a conversation with clearly marked speaker labels such as "Host:" and "Guest:". The content should be an engaging, natural conversation where the host and guest actively exchange ideas, ask thought-provoking questions, express emotions. Eachdialogue turn should be labeled with "Host:" or "Guest:" to clearly identiy the speaker.
 """
 
-    # Correctly formatted API call
     response = client.chat.completions.create(
-        model="gpt-4o",  # Use "gpt-4" or another model you have access to
+        model="gpt-4o",  
         messages=[
             {"role": "system", "content": "You are an expert podcast host."},
             {"role": "user", "content": prompt}
@@ -50,8 +48,7 @@ Keep it concise so it is not very long
 
 def text_to_speech_gtts(conversation_text, output_file):
     print('TTS Started ...')
-    # Split the conversation by speaker labels
-    lines = conversation_text.split('\n')
+    lines = conversation_text.split('\n') # Split the conversation by speaker labels
     podcast_audio = AudioSegment.silent(duration=100)  # Initialize with a short silence
     c = 0
     for line in lines:
@@ -59,21 +56,20 @@ def text_to_speech_gtts(conversation_text, output_file):
         c+=1
         if line.startswith("Host:"):
             # Convert host lines to audio
-            host_text = line.replace("Host:", "").strip()  # Clean up the label
+            host_text = line.replace("Host:", "").strip()  
             host_tts = gTTS(text=host_text, lang='en')
             host_tts.save("host.mp3")
             host_audio = AudioSegment.from_mp3("host.mp3")
-            podcast_audio += host_audio + AudioSegment.silent(duration=500)  # Add slight pause
+            podcast_audio += host_audio + AudioSegment.silent(duration=500)  # slight pause
 
         elif line.startswith("Guest:"):
             # Convert guest lines to audio with a different voice/accent
-            guest_text = line.replace("Guest:", "").strip()  # Clean up the label
-            guest_tts = gTTS(text=guest_text, lang='en', tld='co.uk')  # Change accent
+            guest_text = line.replace("Guest:", "").strip()  
+            guest_tts = gTTS(text=guest_text, lang='en', tld='co.uk')  # Change accent for guest voice
             guest_tts.save("guest.mp3")
             guest_audio = AudioSegment.from_mp3("guest.mp3")
-            podcast_audio += guest_audio + AudioSegment.silent(duration=500)  # Add slight pause
+            podcast_audio += guest_audio + AudioSegment.silent(duration=500)  # slight pause
 
     podcast_audio.export(output_file, format="mp3")
     print('TTS DONE, File Saved')
-    # Clean up temporary files
     return output_file

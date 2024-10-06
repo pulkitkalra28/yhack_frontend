@@ -30,12 +30,10 @@ def modify_video(video_file, data,output_file_path):
     text_clips = []
     duration_per_chunk = 2  # Duration for each text chunk (in seconds)
     for i, chunk in enumerate(formatted_chunks):
-        # Create shadow text clip with a slight offset for the shadow effect
         txt_clip_shadow = TextClip(chunk, fontsize=30, color='black', font="Arial-Bold") \
             .set_duration(duration_per_chunk) \
             .set_position(('center', 'center'))  # Position the shadow at the center
 
-        # Create the main text clip, with a slight offset for the shadow effect
         txt_clip = TextClip(chunk, fontsize=30, color='green', font="Arial-Bold") \
             .set_duration(duration_per_chunk) \
             .set_position(lambda t: ('center', video.h // 1 - 5))  # Adjust the main text slightly above the shadow
@@ -51,14 +49,11 @@ def modify_video(video_file, data,output_file_path):
     # Calculate the total duration required for the video based on the number of text chunks
     total_duration = len(formatted_chunks) * duration_per_chunk
 
-    # Trim the video to match the total duration of the text chunks
     video = video.subclip(0, total_duration)
 
-    # Combine the video with the text clips
     final_clip = CompositeVideoClip([video] + text_clips)
 
 
-    # Output the final video
     final_clip.write_videofile(output_file_path, fps=video.fps)
 
 def openai_sequence_response(extracted_text):
@@ -71,14 +66,11 @@ def openai_sequence_response(extracted_text):
         {"role": "user", "content":extracted_text}
     )
     try:
-        # Call the Azure OpenAI API for chat completions
-        # print(prompt_list)
         response = client.chat.completions.create(
             model=model_name,
             messages=prompt_list
         )
 
-        # Extract and return the generated text
         response_text = response.choices[0].message.content
         return response_text
 
