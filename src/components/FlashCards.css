@@ -1,3 +1,20 @@
+.centered-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.content-box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
 .flashcard {
   width: 300px;
   height: 200px;
@@ -17,30 +34,17 @@
   transform: rotateY(180deg);
 }
 
-.flashcard-front {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgb(228, 182, 165);
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding-inline: 5px;
-}
-
+.flashcard-front,
 .flashcard-back {
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  background-color: rgb(49, 212, 98);
+  align-items: center;
+  background-color: rgb(218, 197, 164);
   border: 1px solid #ccc;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -51,6 +55,22 @@
   transform: rotateY(180deg);
 }
 
+.flashcard p {
+  margin: 10px 0; /* Add some margin between the text and the span */
+}
+
+/* Style for the click-to-reveal span */
+.click-to-reveal {
+  margin-top: 20px;
+  background-color: #000;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Navigation buttons */
 .navigation-buttons {
   margin-top: 20px;
   display: flex;
@@ -65,4 +85,8 @@ button {
   border: none;
   cursor: pointer;
   border-radius: 5px;
+}
+
+button:hover {
+  background-color: #45a049;
 }

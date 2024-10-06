@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios'; // Import Axios for making the API call
+import { usePdf } from '../context/PdfContext'; // Import usePdf context
 import './Options.css';
 
 const Options = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const pdfFile = location.state?.pdfFile; // Access the passed PDF file
+  const { pdfFile } = usePdf(); // Get the pdfFile from context
 
   const [loading, setLoading] = useState(false); // Loader state
   const [audioFileLink, setAudioFileLink] = useState(''); // To store the audio file link
@@ -14,45 +15,63 @@ const Options = () => {
   const [flashcardsData, setFlashcardsData] = useState(null); // To store flashcards data
   const [error, setError] = useState(''); // To store error messages
 
-  // Function to send the PDF file to the /createPodcast API
+  useEffect(() => {
+    console.log("pdfFile", pdfFile);
+  }, []); 
+
   const handleCreatePodcast = async () => {
+    // event.preventDefault();
+    console.log("Create Podcast button clicked");
+  
     if (!pdfFile) {
       alert('No PDF file available to send.');
       return;
     }
-
+  
     setLoading(true); // Show loader
     setError(''); // Clear previous errors
-    setAudioFileLink(''); // Reset the audio link
-
+    setAudioFileLink(null);
+  
     const formData = new FormData();
     formData.append('file', pdfFile); // Append the file to the form data
-
+  
     try {
-      // Send the file to the Python API for podcast creation
-      const response = await axios.post('http://localhost:5000/createPodcast', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Important to send FormData
-        },
+      console.log("Sending API request...");
+  
+      // Using Fetch API to send the file to the Python API for podcast creation
+      const response = await fetch('http://localhost:5001/createPodcast', {
+        method: 'POST',
+        body: formData,
       });
 
-      // Check if the response is successful
-      if (response.status === 200 && response.data.success) {
-        // Assuming the response contains the fileName of the created podcast file
+      console.log(response);
+  
+      // if (response.ok) {
+      //   const data = await response.json(); // Parse the JSON response
+      //   console.log("Success:", data);
+      //   const podcastFileName = data.fileName;
+      //   alert('Podcast created successfully!');
+        
+      //   // Navigate to the /link component with the relevant data
+      //   navigate('/link', { state: { fileName: podcastFileName } });
+      if(response.status === 200 && response.data.fileName){
+        console.log(response);
         const podcastFileName = response.data.fileName;
-        const podcastFileUrl = `/output/audio/${podcastFileName}`; // Reference the file from the public folder
-        setAudioFileLink(podcastFileUrl); // Set the audio file link to be displayed
         alert('Podcast created successfully!');
+        navigate('/link',{state:{fileName:podcastFileName}});  
       } else {
+        console.log("else block");
         setError('Failed to create podcast. Please try again.');
       }
     } catch (error) {
-      console.error('Error uploading the file:', error);
+      console.error('Error uploading the file:', error.code, error.message);
       setError('Failed to create podcast. Please try again.');
     } finally {
       setLoading(false); // Hide loader after the process completes
     }
   };
+  
+   
 
   // Function to send the PDF file to the /createVideo API
   const handleCreateVideo = async () => {
@@ -70,14 +89,14 @@ const Options = () => {
 
     try {
       // Send the file to the Python API for video creation
-      const response = await axios.post('http://localhost:5000/createVideo', formData, {
+      const response = await axios.post('http://localhost:5001/createVideo', formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // Important to send FormData
         },
       });
 
       // Check if the response is successful
-      if (response.status === 200 && response.data.success) {
+      if (response.status === 200 && response.data.fileName) {
         // Assuming the response contains the fileName of the created video file
         const videoFileName = response.data.fileName;
         const videoFileUrl = `/output/video/${videoFileName}`; // Reference the file from the public folder
@@ -110,15 +129,18 @@ const Options = () => {
 
     try {
       // Send the file to the Python API for flashcards creation
-      const response = await axios.post('http://localhost:5000/createFlashCards', formData, {
+      const response = await axios.post('http://localhost:5001/createFlashCards', formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // Important to send FormData
         },
       });
 
+      console.log(response);
+
       // Check if the response is successful
       if (response.status === 200 && response.data.flashcards) {
         // Set the flashcards data in the state
+        console.log(response);
         setFlashcardsData(response.data.flashcards);
         alert('Flashcards created successfully!');
         
@@ -144,8 +166,10 @@ const Options = () => {
         {/* Display error if there is one */}
         {error && <div className="error-message">{error}</div>}
 
-        {/* Display loader while processing */}
-        {loading && <div className="loader">Processing...</div>}
+      {/* Display CSS-based spinner loader while processing */}
+      {loading && (
+        <div className="loader-spinner"></div>
+      )}
 
         {/* Show audio file link if podcast is created successfully */}
         {audioFileLink && (
@@ -171,7 +195,7 @@ const Options = () => {
 
         <div className="buttons-column">
           {/* Button for creating a podcast */}
-          <button onClick={handleCreatePodcast} disabled={loading}>Create Podcast</button>
+          <button type="button" onClick={(event) => handleCreatePodcast(event)} disabled={loading}>Create Podcast</button>
 
           {/* Button for creating a BrainROT Video */}
           <button onClick={handleCreateVideo} disabled={loading}>Create BrainROT Video</button>
